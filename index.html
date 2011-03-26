@@ -5,12 +5,13 @@
 	<title></title>
 	<style>
 		#world {
-			border: solid 2px #000;
+			border: solid 2px #AAF;
+			background: #333;
 		}
 	</style>
 </head>
 <body>
-	<canvas id="world" width="800" height="600">
+	<canvas id="world" width="800" height="400">
 	</canvas>
 
 	<script src="vendor/underscore.js"></script>
@@ -20,7 +21,26 @@
 		var app = {
 			m: {},
 			v: {},
-			c: {}
+			c: {},
+			$: function (id) {
+				return document.getElementById(id);
+			},
+			log: function (msg) {
+				app.DEBUG && window.console && console.log('[Geno] ' + msg);
+			},
+
+			b2Vec2: Box2D.Common.Math.b2Vec2,
+			b2BodyDef: Box2D.Dynamics.b2BodyDef,
+			b2Body: Box2D.Dynamics.b2Body,
+			b2FixtureDef: Box2D.Dynamics.b2FixtureDef,
+			b2Fixture: Box2D.Dynamics.b2Fixture,
+			b2World: Box2D.Dynamics.b2World,
+			b2MassData: Box2D.Collision.Shapes.b2MassData,
+			b2PolygonShape: Box2D.Collision.Shapes.b2PolygonShape,
+			b2CircleShape: Box2D.Collision.Shapes.b2CircleShape,
+			b2DebugDraw: Box2D.Dynamics.b2DebugDraw,
+
+			DEBUG: true
 		};
 	</script>
 	<script src="app/class.js"></script>
@@ -31,15 +51,30 @@
 	<script src="app/m/population.js"></script>
 
 	<script src="app/v/object.js"></script>
+	<script src="app/v/simulation.js"></script>
 
 	<script src="app/c/object.js"></script>
 	<script src="app/c/creature.js"></script>
-	<script src="app/c/simulation.js"></script>
 	<script src="app/c/population.js"></script>
+	<script src="app/c/simulation.js"></script>
+	<script src="app/c/world.js"></script>
 
 
 	<script>
-		var s = new app.c.Simulation();
+		var s = new app.c.Simulation()
+		s.start();
+
+		/* class file template
+'use strict';
+
+app.Class('', app..Object,
+	function () {
+		app..Object.apply(this);
+	},
+	{
+	}
+);
+		*/		
 	</script>
 </body>
 </html>
