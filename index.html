@@ -1,10 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title></title>
+	<meta charset="utf-8">
+	<title></title>
+	<style>
+		#world {
+			border: solid 2px #000;
+		}
+	</style>
 </head>
 <body>
+	<canvas id="world" width="800" height="600">
+	</canvas>
 
+	<script src="vendor/underscore.js"></script>
+	<script src="vendor/underscore_prototypes.js"></script>
+	<script src="vendor/box2d/Box2dWeb-2.1a.2.js.js"></script>
+	<script>
+		var app = {
+			m: {},
+			v: {},
+			c: {}
+		};
+	</script>
+	<script src="app/class.js"></script>
+	<script src="app/object.js"></script>
+
+	<script src="app/m/object.js"></script>
+	<script src="app/m/creature.js"></script>
+	<script src="app/m/population.js"></script>
+
+	<script src="app/v/object.js"></script>
+
+	<script src="app/c/object.js"></script>
+	<script src="app/c/creature.js"></script>
+	<script src="app/c/simulation.js"></script>
+	<script src="app/c/population.js"></script>
+
+
+	<script>
+		var s = new app.c.Simulation();
+	</script>
 </body>
 </html>
