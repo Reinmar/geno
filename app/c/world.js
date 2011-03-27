@@ -7,42 +7,23 @@ app.Class('app.c.World', app.c.Object,
 		this._init();
 		this._addGround();
 
+		this._b2body_def = new app.b2BodyDef();
+		this._b2fix_def = new app.b2FixtureDef();
+		this._b2joint_def = new app.b2RevoluteJointDef();
+
+		//limbs not colliding
+		this._b2fix_def.filter.groupIndex = -1;
+		this._b2fix_def.shape = new app.b2PolygonShape();
+		this._b2joint_def.enableMotor = true;
+		this._b2joint_def.enableLimit = true;
+		this._b2body_def.type = app.b2Body.b2_dynamicBody;
 
 
-		var fix_def = new app.b2FixtureDef();
-		fix_def.density = 1;
-		fix_def.friction = 0.9;
-		fix_def.restitution = 0.1;
-
-		var body_def = new app.b2BodyDef();
-		body_def.type = app.b2Body.b2_dynamicBody;
-		fix_def.shape = new app.b2PolygonShape();
-
-
-		body_def.position.x = 20;
-		body_def.position.y = 10;
-		fix_def.shape.SetAsBox(1, 0.2);
-		fix_def.filter.groupIndex = -1;
-		var b1 = this._b2world.CreateBody(body_def)
-		b1.CreateFixture(fix_def);
-
-		body_def.position.x = 20.8;
-		body_def.position.y = 10;
-		fix_def.shape.SetAsBox(1, 0.2);
-		var b2 = this._b2world.CreateBody(body_def);
-		b2.CreateFixture(fix_def);
-
-		body_def.position.x = 22.8;
-		body_def.position.y = 10;
-		fix_def.shape.SetAsBox(0.5, 0.1);
-		var b3 = this._b2world.CreateBody(body_def);
-		b3.CreateFixture(fix_def);		
-
-		var jointDef = new app.b2RevoluteJointDef();
+		/*var jointDef = new app.b2RevoluteJointDef();
 		jointDef.Initialize(b1, b2, b1.GetPosition());
 		jointDef.referenceAngle = Math.toRadians(30);
-		jointDef.lowerAngle     = Math.toRadians(-90); // -90 degrees
-		jointDef.upperAngle     =  Math.toRadians(90); // 45 degrees
+		jointDef.lowerAngle     = Math.toRadians(-90);
+		jointDef.upperAngle     =  Math.toRadians(90);
 		jointDef.enableLimit    = true;
 		jointDef.maxMotorTorque = 20.0;
 		jointDef.motorSpeed     = 4;
@@ -50,10 +31,32 @@ app.Class('app.c.World', app.c.Object,
 		this.j = this._b2world.CreateJoint(jointDef);
 		jointDef.Initialize(b2, b3, b2.GetPosition());
 		jointDef.enableLimit = false;
-		this._b2world.CreateJoint(jointDef);
+		this._b2world.CreateJoint(jointDef);*/
 	},
 	{
 		_b2world: null,
+		// for creatures
+		_b2body_def: null,
+		_b2fix_def: null,
+		_b2joint_def: null,
+
+		_creature_body: null,
+	
+		/*
+		 * @param creature app.m.Creature
+		 */
+		setCreature: function (creature) {
+			//TODO remove old creature
+			console.log(creature);
+			this._creature_body = this._addLimb(null, creature.getBody());
+		},
+
+		/*
+		 * Return distance creature walked
+		 */
+		getCreatureDistance: function () {
+			return 0;
+		},
 
 		loop: function (fast, dt) {
 			var world = this._b2world;
@@ -65,11 +68,11 @@ app.Class('app.c.World', app.c.Object,
 			);
 			!fast && world.DrawDebugData();
 			world.ClearForces();
-		},			
+		},
 			
 		_addGround: function () {
 			var fix_def = new app.b2FixtureDef();
-			fix_def.density = 2.0;
+			fix_def.density = 200.0;
 			fix_def.friction = 0.5;
 			fix_def.restitution = 0.1;
 
@@ -82,6 +85,54 @@ app.Class('app.c.World', app.c.Object,
 			fix_def.shape.SetAsBox(25, 0.5);
 			this._b2world.CreateBody(body_def).CreateFixture(fix_def);
 		},
+		
+		/*
+		 * @param parent b2Body
+		 */
+		_addLimb: function (parent, limb, joint) {
+			var fd = this._b2fix_def,
+				bd = this._b2body_def,
+				def = limb.getDef();
+	
+			fd.density = def.density;
+			fd.friction = def.friction;
+			fd.restitution = def.restitution;
+			fd.shape.SetAsBox(def.length, def.width);
+
+			bd.position = this._getLimbPos(parent, limb, joint);
+
+			var body = this._b2world.CreateBody(bd);
+			body.CreateFixture(fd);
+			//for my own usage
+			body.def = def;
+	
+			for (var i = 0, l = limb.getJointsCount(); i < l; ++i) {
+				var joint = limb.getJoint(i);
+				this._addLimb(body, joint.child, joint);
+			}
+
+			return body;
+		},
+
+		_getLimbPos: function (parent, limb, joint) {
+			var x, y;
+			//body limb
+			if (!parent) {
+				x = app.c.World.BODY_POS_X;
+				y = app.c.World.BODY_POS_Y;
+			}
+			else {
+				x = parent.GetPosition().x + (
+					joint.child_pos.x * (parent.def.length + limb.getDef().length)
+				);
+				y = parent.GetPosition().y + (
+					joint.child_pos.y * (parent.def.width + limb.getDef().width)
+				);
+			}
+			console.log(x);
+			return new app.b2Vec2(x, y);
+		},
+
 		_init: function () {
 			var world = new app.b2World(
 				new app.b2Vec2(0, 10),	//gravity
@@ -97,5 +148,9 @@ app.Class('app.c.World', app.c.Object,
 
 			this._b2world = world;
 		}
+	},
+	{
+		BODY_POS_X: 20,
+		BODY_POS_Y: 15
 	}
 );

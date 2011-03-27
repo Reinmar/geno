@@ -11,6 +11,10 @@ app.Class('app.m.Creature', app.m.Object,
 		_body: null,
 		_genotype: null,
 
+		getBody: function () {
+			return this._body;
+		},
+
 		getGenotype: function () {
 			return {};
 		},

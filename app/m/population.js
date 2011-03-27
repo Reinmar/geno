@@ -12,8 +12,13 @@ app.Class('app.m.Population', app.m.Object,
 		addCreature: function (creature) {
 			this._creatures.push(creature);
 		},
+
 		clear: function () {
 			this._creatures = [];
 		},
+
+		getCreature: function (i) {
+			return this._creatures[i];
+		}
 	}
 );

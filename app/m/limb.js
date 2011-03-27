@@ -60,7 +60,19 @@ app.Class('app.m.Limb', app.m.Object,
 					});
 				}
 			}
-		}
+		},
+
+		getDef: function () {
+			return this._def;
+		},
+
+		getJoint: function (i) {
+			return this._joints[i];
+		},
+
+		getJointsCount: function () {
+			return this._joints.length;
+		},
 	}
 );
 

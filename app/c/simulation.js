@@ -13,6 +13,10 @@ app.Class('app.c.Simulation', app.c.Object,
 		);
 		this._population.randomize();
 
+
+		//TODO
+		this._world.setCreature(this._population.getM().getCreature(0));
+
 		this.slow();
 	},
 	{
@@ -45,14 +49,8 @@ app.Class('app.c.Simulation', app.c.Object,
 		},
 
 		_loop: function () {
-			var psin = Math.paramSin(1, 1, 0);
 			var fn = function () {
 				this._step++;
-				var j = this._world.j;
-				if (j.GetJointAngle() > j.GetUpperLimit() - Math.toRadians(1))
-					j.SetMotorSpeed(-1);
-				if (j.GetJointAngle() < j.GetLowerLimit() + Math.toRadians(1))
-					j.SetMotorSpeed(1);
 				this._world.loop(this._fast, app.c.Simulation.LOOP_DT_SLOW);
 			}.bind(this);
 
