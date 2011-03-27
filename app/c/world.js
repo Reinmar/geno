@@ -40,11 +40,12 @@ app.Class('app.c.World', app.c.Object,
 
 		var jointDef = new app.b2RevoluteJointDef();
 		jointDef.Initialize(b1, b2, b1.GetPosition());
-		jointDef.lowerAngle     = Math.toRadians(-45); // -90 degrees
-		jointDef.upperAngle     =  Math.toRadians(45); // 45 degrees
+		jointDef.referenceAngle = Math.toRadians(30);
+		jointDef.lowerAngle     = Math.toRadians(-90); // -90 degrees
+		jointDef.upperAngle     =  Math.toRadians(90); // 45 degrees
 		jointDef.enableLimit    = true;
-		jointDef.maxMotorTorque = 100.0;
-		jointDef.motorSpeed     = 0.2;
+		jointDef.maxMotorTorque = 20.0;
+		jointDef.motorSpeed     = 4;
 		jointDef.enableMotor    = true;
 		this.j = this._b2world.CreateJoint(jointDef);
 		jointDef.Initialize(b2, b3, b2.GetPosition());
