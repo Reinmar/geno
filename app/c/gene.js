@@ -3,8 +3,10 @@
 app.Class('app.c.Gene', app.c.Object,
 	function (min, max, value) {
 		app.c.Object.apply(this);
-
-		this._m = new app.m.Gene(min, max, value);
+	
+		if (arguments.length > 1) {
+			this.setM(min, max, value);
+		}
 	},
 	{
 		_m: null,
@@ -14,6 +16,10 @@ app.Class('app.c.Gene', app.c.Object,
 				this._m.getMin(),
 				this._m.getMax()
 			));
+			return this;
+		},
+		setM: function (min, max, value) {
+			this._m = new app.m.Gene(min, max, value);
 			return this;
 		},
 	}

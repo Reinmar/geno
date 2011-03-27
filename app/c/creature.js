@@ -18,14 +18,16 @@ app.Class('app.c.Creature', app.c.Object,
 		},
 
 		_randomLimbGenotype: function (level) {
-			var S = app.c.Creature;
+			var S = app.c.Creature,
+				g = new app.c.Gene();
+
 			var limb = {
-				exists:			new app.c.Gene(S.MIN.LIMB_EXISTS, S.MAX.LIMB_EXISTS).random(),
-				width:			new app.c.Gene(S.MIN.LIMB_WIDTH, S.MAX.LIMB_WIDTH).random(),
-				length:			new app.c.Gene(S.MIN.LIMB_LENGTH, S.MAX.LIMB_LENGTH).random(),
-				density:		new app.c.Gene(S.MIN.LIMB_DENSITY, S.MAX.LIMB_DENSITY).random(),
-				friction:		new app.c.Gene(S.MIN.LIMB_FRICTION, S.MAX.LIMB_FRICTION).random(),
-				restitution:	new app.c.Gene(S.MIN.LIMB_RESTITUTION, S.MAX.LIMB_RESTITUTION).random(),
+				exists:			g.setM(S.MIN.LIMB_EXISTS, S.MAX.LIMB_EXISTS).random().getM(),
+				width:			g.setM(S.MIN.LIMB_WIDTH, S.MAX.LIMB_WIDTH).random().getM(),
+				length:			g.setM(S.MIN.LIMB_LENGTH, S.MAX.LIMB_LENGTH).random().getM(),
+				density:		g.setM(S.MIN.LIMB_DENSITY, S.MAX.LIMB_DENSITY).random().getM(),
+				friction:		g.setM(S.MIN.LIMB_FRICTION, S.MAX.LIMB_FRICTION).random().getM(),
+				restitution:	g.setM(S.MIN.LIMB_RESTITUTION, S.MAX.LIMB_RESTITUTION).random().getM(),
 				joints:			[],
 			};
 
@@ -33,23 +35,23 @@ app.Class('app.c.Creature', app.c.Object,
 			var l = S.MAX_CHILDREN_LIMBS[level];
 			for (var i = 0; i < l; ++i) {
 				limb.joints.push({
-					limb:				this._randomLimbGenotype(level + 1),
+					child:				this._randomLimbGenotype(level + 1),
 					motor: {
-						speed:			new app.c.Gene(S.MIN.MOTOR_SPEED, S.MAX.MOTOR_SPEED).random(),
-						max_torque:		new app.c.Gene(S.MIN.MAX_MOTOR_TORQUE, S.MAX.MAX_MOTOR_TORQUE).random()
+						speed:			g.setM(S.MIN.MOTOR_SPEED, S.MAX.MOTOR_SPEED).random().getM(),
+						max_torque:		g.setM(S.MIN.MAX_MOTOR_TORQUE, S.MAX.MAX_MOTOR_TORQUE).random().getM()
 					},
 					angle: {
-						lower:			new app.c.Gene(S.MIN.JOINT_LOWER_ANGLE, S.MAX.JOINT_LOWER_ANGLE).random(),
-						upper:			new app.c.Gene(S.MIN.JOINT_UPPER_ANGLE, S.MAX.JOINT_UPPER_ANGLE).random(),
-						reference:		new app.c.Gene(S.MIN.JOINT_REFERENCE_ANGLE, S.MAX.JOINT_REFERENCE_ANGLE).random()
+						lower:			g.setM(S.MIN.JOINT_LOWER_ANGLE, S.MAX.JOINT_LOWER_ANGLE).random().getM(),
+						upper:			g.setM(S.MIN.JOINT_UPPER_ANGLE, S.MAX.JOINT_UPPER_ANGLE).random().getM(),
+						reference:		g.setM(S.MIN.JOINT_REFERENCE_ANGLE, S.MAX.JOINT_REFERENCE_ANGLE).random().getM()
 					},
 					child_pos: {
-						x:				new app.c.Gene(S.MIN.CHILD_LIMB_POS, S.MAX.CHILD_LIMB_POS).random(),
-						y:				new app.c.Gene(S.MIN.CHILD_LIMB_POS, S.MAX.CHILD_LIMB_POS).random()
+						x:				g.setM(S.MIN.CHILD_LIMB_POS, S.MAX.CHILD_LIMB_POS).random().getM(),
+						y:				g.setM(S.MIN.CHILD_LIMB_POS, S.MAX.CHILD_LIMB_POS).random().getM()
 					},
 					joint_pos: {
-						x:				new app.c.Gene(S.MIN.JOINT_POS, S.MAX.JOINT_POS).random(),
-						y:				new app.c.Gene(S.MIN.JOINT_POS, S.MAX.JOINT_POS).random()
+						x:				g.setM(S.MIN.JOINT_POS, S.MAX.JOINT_POS).random().getM(),
+						y:				g.setM(S.MIN.JOINT_POS, S.MAX.JOINT_POS).random().getM()
 					}
 				});
 			}
@@ -59,7 +61,7 @@ app.Class('app.c.Creature', app.c.Object,
 	},
 	{
 		MIN: {
-			// < 0 == false
+			// > 0 == true
 			LIMB_EXISTS: -1,
 			// in meters
 			LIMB_LENGTH: 0.1,

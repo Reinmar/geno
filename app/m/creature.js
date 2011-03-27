@@ -9,12 +9,15 @@ app.Class('app.m.Creature', app.m.Object,
 	{
 		// main limb
 		_body: null,
+		_genotype: null,
 
 		getGenotype: function () {
 			return {};
 		},
 
 		_fromGenotype: function (genotype) {
+			this._genotype = genotype;
+			this._body = new app.m.Limb(null, genotype);
 		}
 	}
 );
