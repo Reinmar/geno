@@ -45,14 +45,23 @@ app.Class('app.c.Simulation', app.c.Object,
 		},
 
 		_loop: function () {
-			if (!this._fast) {
+			var psin = Math.paramSin(1, 1, 0);
+			var fn = function () {
 				this._step++;
+				var j = this._world.j;
+				if (j.GetJointAngle() > j.GetUpperLimit() - Math.toRadians(1))
+					j.SetMotorSpeed(-1);
+				if (j.GetJointAngle() < j.GetLowerLimit() + Math.toRadians(1))
+					j.SetMotorSpeed(1);
 				this._world.loop(this._fast, app.c.Simulation.LOOP_DT_SLOW);
+			}.bind(this);
+
+			if (!this._fast) {
+				fn();
 			}
 			else {
 				for (var i = 0; i < 10000; ++i) {
-					this._step++;
-					this._world.loop(this._fast, app.c.Simulation.LOOP_DT_SLOW);
+					fn();
 				}
 			}
 
@@ -60,7 +69,7 @@ app.Class('app.c.Simulation', app.c.Object,
 				this._loop();
 			}.bind(this), this._dt);
 
-			if (this._step % 500 === 0)
+			if (this._step % 1000 === 0)
 				app.log('Simulation step: ' + this._step);
 		},
 	},

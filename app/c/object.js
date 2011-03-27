@@ -11,8 +11,5 @@ app.Class('app.c.Object', app.Object,
 		getV: function () {
 			return this._v;
 		},
-		setM: function (m) {
-			this._m = m;
-		}
 	}
 );

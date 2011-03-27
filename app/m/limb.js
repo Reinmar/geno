@@ -12,9 +12,9 @@ app.Class('app.m.Limb', app.m.Object,
 	{
 		// limb
 		_parent: null,
-		// { width, length, weight }
+		// { width, length, density, friction }
 		_def: null,
-		// [ { child, motor:{sin_a, sin_w, sin_t}, pos:{x, y} } ]
+		// [ { child, motor:{sin_a, sin_w, sin_f, max_torque}, pos:{x, y} } ]
 		// pos.x and pos.y given in percentage <0;1>
 		_joints: null,
 
