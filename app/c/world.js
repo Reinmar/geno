@@ -48,8 +48,8 @@ app.Class('app.c.World', app.c.Object,
 
 			world.Step(
 				dt / 1000,	//frame-rate
-				5,			//velocity iterations
-				5			//position iterations
+				2,			//velocity iterations
+				2			//position iterations
 			);
 			!fast && world.DrawDebugData();
 			world.ClearForces();
@@ -76,7 +76,7 @@ app.Class('app.c.World', app.c.Object,
 		 */
 		_addLimb: function (parent, limb, joint) {
 			var fd = this._b2fix_def,
-				bd = this._b2body_def
+				bd = this._b2body_def,
 				jd = this._b2joint_def,
 				def = limb.getDef();
 	
