@@ -18,10 +18,15 @@ app.Class('app.c.Simulation', app.c.Object,
 		this._world.setCreature(this._population.getM().getCreature(0));
 
 		this.slow();
+		//this.fast();
 	},
 	{
 		_v: null,
 		_population: null,
+		//last noticed microtime
+		_last_time: 0,
+		//time simulation takes
+		_time_elapsed: 0,
 		_on: false,
 		_fast: false,
 		_dt: 0,
@@ -32,33 +37,46 @@ app.Class('app.c.Simulation', app.c.Object,
 			this._fast = true;
 			this._dt = app.c.Simulation.LOOP_DT_FAST;
 		},
+
 		slow: function () {
 			this._fast = false;
 			this._dt = app.c.Simulation.LOOP_DT_SLOW;
 		},
+
 		start: function () {
 			this._on = true;
-			this._loop();
+			this._last_time = +new Date();
 
-			app.log('Simulation start');
+			app.log('Simulation started');
+
+			this._loop();
 		},
+
 		stop: function () {
 			this._on = false;
+			this._trackTime();
 
-			app.log('Simulation stop');
+			app.log('Simulation stopped (time: ' + this._time_elapsed / 1000 + 's)');
+		},
+
+		_trackTime: function () {
+			this._time_elapsed += (new Date() - this._last_time);
+			this._last_time = +new Date();			
 		},
 
 		_loop: function () {
+			var world = this._world;
+
 			var fn = function () {
 				this._step++;
-				this._world.loop(this._fast, app.c.Simulation.LOOP_DT_SLOW);
+				world.loop(this._fast, app.c.Simulation.LOOP_DT_SLOW);
 			}.bind(this);
 
 			if (!this._fast) {
 				fn();
 			}
 			else {
-				for (var i = 0; i < 10000; ++i) {
+				for (var i = 0; i < 50000 && this._on; ++i) {
 					fn();
 				}
 			}
@@ -67,13 +85,15 @@ app.Class('app.c.Simulation', app.c.Object,
 				this._loop();
 			}.bind(this), this._dt);
 
-			if (this._step % 1000 === 0)
-				app.log('Simulation step: ' + this._step);
+			if (this._step % 1000 === 0) {
+				this._trackTime();
+				app.log('Simulation step: ' + this._step + ' (time: ' + this._time_elapsed / 1000 + 's)');
+			}
 		},
 	},
 	{
 		POPULATION_SIZE: 100,
 		LOOP_DT_FAST: 1,
-		LOOP_DT_SLOW: 25,
+		LOOP_DT_SLOW: 30,
 	}
 );

@@ -15,9 +15,9 @@ app.Class('app.m.Limb', app.m.Object,
 		// [ {
 		//		child,
 		//		angle: {lower, upper, reference},
-		//		motor:{max_torque, speed},
-		//		joint_pos:{x, y},
-		//		child_pos:{x,y}
+		//		motor: {max_torque, speed},
+		//		joint_pos: {x, y},
+		//		child_pos: {x,y}
 		// } ]
 		_joints: null,
 

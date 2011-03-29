@@ -70,7 +70,7 @@ app.Class('app.c.Creature', app.c.Object,
 			// in kg/m2
 			LIMB_DENSITY: 0.1,
 			// in ?
-			LIMB_FRICTION: 0.1,
+			LIMB_FRICTION: 0.5,
 			// in ?
 			LIMB_RESTITUTION: 0.01,
 			// in Nm
@@ -83,8 +83,8 @@ app.Class('app.c.Creature', app.c.Object,
 			// in % - how far from center of limb is left/right side of its child located
 			// 1 == [-1-][-2-]		-1 == [-2-][-1-]
 			CHILD_LIMB_POS: -1,
-			// in % - how far from center of limb is joint located (min(child_limb_pos))
-			JOINT_POS: -1,
+			// in % - how far from center of limb is joint located
+			JOINT_POS: 0,
 		},
 		MAX: {
 			LIMB_EXISTS: 1,
@@ -94,7 +94,7 @@ app.Class('app.c.Creature', app.c.Object,
 			LIMB_FRICTION: 0.9,
 			LIMB_RESTITUTION: 0.5,
 			MAX_MOTOR_TORQUE: 50,
-			MOTOR_SPEED: 4,
+			MOTOR_SPEED: 5,
 			JOINT_LOWER_ANGLE: Math.toRadians(0),
 			JOINT_UPPER_ANGLE: Math.toRadians(120),
 			JOINT_REFERENCE_ANGLE: Math.toRadians(180),
