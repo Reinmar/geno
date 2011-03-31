@@ -18,7 +18,7 @@ app.Class('app.m.Creature', app.m.Object,
 		},
 
 		getGenotype: function () {
-			return {};
+			return this._genotype;
 		},
 
 		getName: function () {

@@ -16,6 +16,8 @@ app.Class('app.c.Simulation', app.c.Object,
 		this._ga.init();
 
 		this._observeControllButtons();
+
+		this._startNextTest();
 	},
 	{
 		_v: null,
@@ -56,8 +58,6 @@ app.Class('app.c.Simulation', app.c.Object,
 
 			app.log('Simulation started');
 			
-			this._startNextTest();
-
 			this._loop();
 		},
 
@@ -70,7 +70,7 @@ app.Class('app.c.Simulation', app.c.Object,
 
 		generationFromJSON: function (json) {
 			this._ga.generationFromJSON(json);
-			//TODO nextCreature itd
+			this._startNextTest();
 		},
 
 		_trackTime: function () {

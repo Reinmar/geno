@@ -16,6 +16,15 @@ app.Class('app.m.GA', app.m.Object,
 		_current_creature: null,
 		//index of current creature
 		_current_creature_i: 0,
+		//cache of parents for reproduction
+		_parents: null,
+
+		nextSession: function () {
+			this._current_creature = null;
+			this._current_creature_i = 0;
+			this._results = [];
+			this._generation++;
+		},
 
 		getCurrentCreature: function () {
 			return this._current_creature;
@@ -51,6 +60,39 @@ app.Class('app.m.GA', app.m.Object,
 			this._results.sort(function (a, b) {
 				return b.result - a.result;
 			});
+		},
+
+		prepareParents: function (parents_number) {
+			var parents = [],
+				results = this._results;
+
+			var results_sum = 0;
+			for (var i = 0; i < parents_number; ++i) {
+				results_sum += results[i].result;
+			}
+			
+			var s = 0;
+			for (var i = 0; i < parents_number; ++i) {
+				s += results[i].result;
+
+				parents.push({
+					max_rand: s / results_sum,
+					creature_i: results[i].creature_i
+				});
+			}
+
+			this._parents = parents;
+		},
+
+		getRandomParent: function () {
+			var r = Math.random(),
+				i = 0,
+				parents = this._parents;
+
+			while (r > parents[i].max_rand) {
+				++i;
+			}
+			return this._population.getCreature(parents[i].creature_i);
 		}
 	}
 );
