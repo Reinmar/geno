@@ -7,6 +7,8 @@ app.Class('app.m.GA', app.m.Object,
 		this._results = [];
 	},
 	{
+		//generation number
+		_generation: 0,
 		_population: null,
 		//results for current population
 		_results: null,
@@ -25,7 +27,10 @@ app.Class('app.m.GA', app.m.Object,
 		},
 
 		setCurrentCreatureResult: function (result) {
-			this._results[this._current_creature_i] = result;
+			this._results.push({
+				creature_i: this._current_creature_i,
+				result: result
+			});
 		},
 		
 		getNextCreature: function () {
@@ -35,8 +40,18 @@ app.Class('app.m.GA', app.m.Object,
 		},
 
 		hasNextCreature: function () {
-			return this._current_creature_i < App.c.GA.POPULATION_SIZE - 1;
+			return this._current_creature_i < app.c.GA.POPULATION_SIZE;
 		},
+
+		getGeneration: function () {
+			return this._generation;
+		},
+
+		sortResults: function () {
+			this._results.sort(function (a, b) {
+				return b.result - a.result;
+			});
+		}
 	}
 );
 

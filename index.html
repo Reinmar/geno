@@ -8,6 +8,9 @@
 			border: solid 2px #AAF;
 			background: #333;
 		}
+		textarea {
+			display: block;
+		}
 	</style>
 </head>
 <body>
@@ -19,6 +22,17 @@
 		<button id="sim_slow">Slow mode</button>
 		<button id="sim_fast">Fast mode</button>
 	</p>
+
+	<section>
+		<h1>Current generation</h1>
+		<textarea id="last_generation" rows="10" cols="100"></textarea>
+		<button id="sim_set_generation">Use this generation</button>
+	</section>
+	<section>
+		<h1>Top ten creatures</h1>
+		<textarea id="top10_creatures" rows="10" cols="100"></textarea>
+		<button id="sim_set_generation">Use this as generation</button>
+	</section>
 
 	<script src="vendor/underscore.js"></script>
 	<script src="vendor/underscore_prototypes.js"></script>
@@ -73,7 +87,6 @@
 
 	<script>
 		var s = new app.c.Simulation();
-		s.start();
 
 		/* class file template
 'use strict';

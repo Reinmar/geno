@@ -1,8 +1,30 @@
 'use strict';
 
 app.Class('app.c.Creature', app.c.Object,
-	function () {
+	function (name, json_obj) {
 		app.c.Object.apply(this);
+
+		if (name && json_obj) {
+			var hydrateWithGenes = function (obj) {
+				if (obj && obj._class == 'app.m.Gene') {
+					return app.c.Gene.fromJSON(obj).getM();
+				}
+				else if (Object.isNumber(obj)) {
+					return obj;
+				}
+				else {
+					for (var i in obj) {
+						if (obj.hasOwnProperty(i)) {
+							obj[i] = hydrateWithGenes(obj[i]);
+						}
+					}
+
+					return obj;
+				}
+			}
+			var genotype = hydrateWithGenes(json_obj);
+			this.fromGenotype(name, genotype);
+		}
 	},
 	{
 		_m: null,

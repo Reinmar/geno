@@ -18,9 +18,19 @@ app.Class('app.c.Gene', app.c.Object,
 			));
 			return this;
 		},
+
 		setM: function (min, max, value) {
 			this._m = new app.m.Gene(min, max, value);
 			return this;
 		},
+	},
+	{
+		fromJSON: function (json_obj) {
+			return new app.c.Gene(
+				json_obj.min,
+				json_obj.max,
+				json_obj.value
+			);
+		}
 	}
 );

@@ -1,10 +1,16 @@
 'use strict';
 
 app.Class('app.c.Population', app.c.Object,
-	function (name, size) {
+	function (name, size_or_json) {
 		app.c.Object.apply(this);
+
+		if (Object.isNumber(size_or_json)) {
+			this._m = new app.m.Population(name, size_or_json);
+		}
+		else {
+			this._fromJSON(name, size_or_json);
+		}
 		
-		this._m = new app.m.Population(name, size);
 	},
 	{
 		_m: null,
@@ -22,5 +28,16 @@ app.Class('app.c.Population', app.c.Object,
 				this._m.addCreature(cr.getM());
 			}
 		},
+
+		_fromJSON: function (name, json) {
+			var obj = JSON.parse(json);
+			this._m = new app.m.Population(name, obj.length);
+
+			for (var i = 0, l = obj.length; i < l; ++i) {
+				this._m.addCreature(
+					new app.c.Creature(name + '_cr:' + i, obj[i]).getM()
+				);
+			}
+		}
 	}
 );

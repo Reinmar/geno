@@ -82,13 +82,13 @@ app.Class('app.c.World', app.c.Object,
 			fix_def.friction = 0.5;
 			fix_def.restitution = 0.1;
 
-			//ground { left: -5m; top: 18m; width:100m }
+			//ground { left: -5m; top: 18m; width:200m }
 			var body_def = new app.b2BodyDef();
 			body_def.type = app.b2Body.b2_staticBody;
-			body_def.position.x = 20;
+			body_def.position.x = 22.5;
 			body_def.position.y = 20;
 			fix_def.shape = new app.b2PolygonShape();
-			fix_def.shape.SetAsBox(50, 2);
+			fix_def.shape.SetAsBox(100, 2);
 			this._b2world.CreateBody(body_def).CreateFixture(fix_def);
 		},
 		

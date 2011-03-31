@@ -6,6 +6,7 @@ app.Class('app.m.Population', app.m.Object,
 
 		this._name = name;
 		this._size = size;
+
 		this.clear();
 	},
 	{
@@ -33,6 +34,10 @@ app.Class('app.m.Population', app.m.Object,
 
 		getName: function () {
 			return this._name;
-		}
+		},
+
+		toJSON: function () {
+			return JSON.stringify(this._creatures);
+		},
 	}
 );

@@ -17,14 +17,26 @@ app.Class('app.m.Gene', app.m.Object,
 		setValue: function (v) {
 			this._value = v;
 		},
+
 		getValue: function () {
 			return this._value;
 		},
+
 		getMin: function () {
 			return this._min;
 		},
+
 		getMax: function () {
 			return this._max;
+		},
+
+		toJSON: function () {
+			return {
+				_class: 'app.m.Gene',
+				min: this._min,
+				max: this._max,
+				value: this._value
+			};
 		}
 	}
 );

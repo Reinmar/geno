@@ -5,16 +5,17 @@ app.Class('app.c.Simulation', app.c.Object,
 		app.c.Object.apply(this);
 
 		this._world = new app.c.World();
-
 		this._v = new app.v.Simulation(app.$('world'));
-		
 		this._ga = new app.c.GA();
-
-		//TODO
-		//this._world.setCreature(this._population.getM().getCreature(0));
-
 		this.slow();
-		//this.fast();
+		
+
+		this._ga.attachEvent('onNewPopulation', function (population_json) {
+			app.$('last_generation').value = population_json;
+		});
+		this._ga.init();
+
+		this._observeControllButtons();
 	},
 	{
 		_v: null,
@@ -67,6 +68,11 @@ app.Class('app.c.Simulation', app.c.Object,
 			app.log('Simulation stopped (time: ' + this._time_elapsed / 1000 + 's)');
 		},
 
+		generationFromJSON: function (json) {
+			this._ga.generationFromJSON(json);
+			//TODO nextCreature itd
+		},
+
 		_trackTime: function () {
 			this._time_elapsed += (new Date() - this._last_time);
 			this._last_time = +new Date();			
@@ -93,7 +99,7 @@ app.Class('app.c.Simulation', app.c.Object,
 				fn();
 			}
 			else {
-				for (var i = 0; i < 10000 && this._on; ++i) {
+				for (var i = 0; i < 5000 && this._on; ++i) {
 					fn();
 				}
 			}
@@ -128,7 +134,26 @@ app.Class('app.c.Simulation', app.c.Object,
 		_finishCurrentTest: function () {
 			var result = this._world.getCreatureDistance();
 			this._ga.setCurrentCreatureResult(result);
-		}
+		},
+
+		_observeControllButtons: function () {
+			var that = this;
+			app.$('sim_start').addEventListener('click', function (event) {
+				that.start();
+			}, false);
+			app.$('sim_stop').addEventListener('click', function (event) {
+				that.stop();
+			}, false);
+			app.$('sim_slow').addEventListener('click', function (event) {
+				that.slow();
+			}, false);
+			app.$('sim_fast').addEventListener('click', function (event) {
+				that.fast();
+			}, false);
+			app.$('sim_set_generation').addEventListener('click', function (event) {
+				that.generationFromJSON(app.$('last_generation').value);
+			}, false);
+		}			
 	},
 	{
 		LOOP_DT_FAST: 1,

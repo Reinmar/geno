@@ -13,6 +13,7 @@ app.Class('app.Object', null,
 			context = context || this;
 			this._events[name].push({ callback: callback, context: context });
 		},
+
 		fireEvent: function (name) {
 			var events = this._events[name];
 
@@ -20,6 +21,7 @@ app.Class('app.Object', null,
 				event.callback.apply(event.context);
 			});
 		},
+
 		fireDataEvent: function (name, data) {
 			var events = this._events[name];
 

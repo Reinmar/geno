@@ -1,3 +1,4 @@
 _.extend(Object, {
-	extend: _.extend
+	extend: _.extend,
+	isNumber: _.isNumber
 });

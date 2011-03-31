@@ -25,10 +25,14 @@ app.Class('app.m.Creature', app.m.Object,
 			return this._name;
 		},
 
+		toJSON: function () {
+			return this._genotype;
+		},
+
 		_fromGenotype: function (genotype) {
 			this._genotype = genotype;
 			this._body = new app.m.Limb(null, genotype);
-		}
+		},
 	}
 );
 
