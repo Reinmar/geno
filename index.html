@@ -45,8 +45,11 @@
 			$: function (id) {
 				return document.getElementById(id);
 			},
-			log: function (msg) {
-				app.DEBUG && window.console && console.log('[Geno] ' + msg);
+			log: function (msg, time) {
+				window.console && console.log('[Geno: ' + (time/1000).toFixed(2) + 's] ' + msg);
+			},
+			debug: function (msg, time) {
+				app.DEBUG && window.console && console.log('[Geno: ' + (time/1000).toFixed(2) + 's] ' + msg);
 			},
 
 			b2Vec2: Box2D.Common.Math.b2Vec2,
@@ -84,9 +87,14 @@
 	<script src="app/c/simulation.js"></script>
 	<script src="app/c/world.js"></script>
 	<script src="app/c/ga.js"></script>
+	<script src="app/c/reproduce.js"></script>
 
 	<script>
-		var s = new app.c.Simulation();
+		try {
+			var s = new app.c.Simulation();
+		} catch (e) {
+			console.log(e);
+		}
 
 		/* class file template
 'use strict';

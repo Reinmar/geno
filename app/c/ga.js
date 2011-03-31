@@ -51,23 +51,27 @@ app.Class('app.c.GA', app.c.Object,
 		_reproduce: function () {
 			var m = this._m,
 				new_pop,
-				reproduction = app.c.Reproduction;
+				new_pop_m,
+				reproduce = app.c.Reproduce,
+				opts = {
+					max_part_length: app.c.GA.REPRODUCTION_MAX_PART_LENGTH,
+					mutation_factor: app.c.GA.REPRODUCTION_MUTATION_FACTOR
+				},
+				new_pop_name = 'p:' + (m.getGeneration() + 1);
 			
 			m.sortResults();
-			this.fireDataEvent('onNewPopulationResults', []);
+			this.fireDataEvent('onPopulationResults', []);
 
 			m.prepareParents(app.c.GA.PARENTS_NUMBER);
 
-			console.log(m);
-
 			new_pop = new app.c.Population(
-				'p:' + m.getGeneration() + 1, app.c.GA.POPULATION_SIZE
+				new_pop_name, app.c.GA.POPULATION_SIZE
 			);
+			new_pop_m = new_pop.getM();
 
 			//WARNING can become an infinite loop when only one parent
 			//has result>0. This is beacuse of wheel of fortune based
 			//on creatures result.
-
 			for (
 				var i = 0, i_inf = 0, l = app.c.GA.POPULATION_SIZE;
 				i < l && i_inf < app.c.GA.POPULATION_SIZE * 9999;
@@ -78,7 +82,7 @@ app.Class('app.c.GA', app.c.Object,
 				//self reproduction? :D
 				if (p1 !== p2) {
 					++i;
-					new_pop.addCreature(reproduction.on(p1, p2));
+					new_pop_m.addCreature(reproduce(p1, p2, new_pop_name + '_cr:' + i, opts));
 				}
 
 				i_inf++;
@@ -87,19 +91,21 @@ app.Class('app.c.GA', app.c.Object,
 				throw new Error('Fell here in infinite loop. Read comment');
 			}
 
-			this.fireDataEvent('onNewPopulation', [ new_pop.getM().toJSON() ]);
+			this.fireDataEvent('onNewPopulation', [ new_pop.getM().toJSON(), new_pop_name ]);
 			
 			this._population = new_pop;
-			m.setPopulation(new_pop.getM());
+			m.setPopulation(new_pop_m);
 			m.nextSession();
 		}
 	},
 	{
-		POPULATION_SIZE: 10,
+		POPULATION_SIZE: 50,
 		//in seconds
 		CREATURE_LIFE_EXPECTANCY: 20,
 		//number of creatures that are used in reproduction
-		PARENTS_NUMBER: 5,
+		PARENTS_NUMBER: 20,
+		REPRODUCTION_MAX_PART_LENGTH: 3,
+		REPRODUCTION_MUTATION_FACTOR: 0.01 //1%
 	}		
 );
 

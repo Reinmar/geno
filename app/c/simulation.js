@@ -3,6 +3,7 @@
 app.Class('app.c.Simulation', app.c.Object,
 	function () {
 		app.c.Object.apply(this);
+		var that = this;
 
 		this._world = new app.c.World();
 		this._v = new app.v.Simulation(app.$('world'));
@@ -10,8 +11,11 @@ app.Class('app.c.Simulation', app.c.Object,
 		this.slow();
 		
 
-		this._ga.attachEvent('onNewPopulation', function (population_json) {
+		this._ga.attachEvent('onNewPopulation', function (population_json, population_name) {
 			app.$('last_generation').value = population_json;
+
+			that._trackTime();
+			app.log('New population (' + population_name + ') created', that._time_elapsed);
 		});
 		this._ga.init();
 
@@ -55,8 +59,9 @@ app.Class('app.c.Simulation', app.c.Object,
 		start: function () {
 			this._on = true;
 			this._last_time = +new Date();
-
-			app.log('Simulation started');
+	
+			this._trackTime();
+			app.log('Simulation started', this._time_elapsed);
 			
 			this._loop();
 		},
@@ -65,7 +70,7 @@ app.Class('app.c.Simulation', app.c.Object,
 			this._on = false;
 			this._trackTime();
 
-			app.log('Simulation stopped (time: ' + this._time_elapsed / 1000 + 's)');
+			app.log('Simulation stopped', this._time_elapsed);
 		},
 
 		generationFromJSON: function (json) {
@@ -110,7 +115,7 @@ app.Class('app.c.Simulation', app.c.Object,
 
 			if (this._step % 1000 === 0) {
 				this._trackTime();
-				app.log('Simulation step: ' + this._step + ' (time: ' + this._time_elapsed / 1000 + 's)');
+				app.debug('Simulation step: ' + this._step, this._time_elapsed);
 			}
 		},
 		

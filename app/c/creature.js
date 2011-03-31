@@ -1,6 +1,10 @@
 'use strict';
 
 app.Class('app.c.Creature', app.c.Object,
+	/*
+	 * I completly fucked up naming creatures and populations.
+	 * Hope i'll find time to fix this.
+	 */
 	function (name, json_obj) {
 		app.c.Object.apply(this);
 
@@ -91,13 +95,13 @@ app.Class('app.c.Creature', app.c.Object,
 			// in meters
 			LIMB_WIDTH: 0.1,
 			// in kg/m2
-			LIMB_DENSITY: 0.5,
+			LIMB_DENSITY: 0.75,
 			// in ?
 			LIMB_FRICTION: 0.5,
 			// in ?
 			LIMB_RESTITUTION: 0.1,
 			// in Nm
-			MAX_MOTOR_TORQUE: 20,
+			MAX_MOTOR_TORQUE: 10,
 			// in angle/s
 			MOTOR_SPEED: 0,
 			JOINT_LOWER_ANGLE: Math.toRadians(-150),
@@ -113,11 +117,11 @@ app.Class('app.c.Creature', app.c.Object,
 			LIMB_EXISTS: 1,
 			LIMB_LENGTH: 1.5,
 			LIMB_WIDTH: 0.25,
-			LIMB_DENSITY: 1,
+			LIMB_DENSITY: 1.5,
 			LIMB_FRICTION: 0.9,
 			LIMB_RESTITUTION: 0.5,
-			MAX_MOTOR_TORQUE: 50,
-			MOTOR_SPEED: 4,
+			MAX_MOTOR_TORQUE: 40,
+			MOTOR_SPEED: 3,
 			JOINT_LOWER_ANGLE: Math.toRadians(-20),
 			JOINT_UPPER_ANGLE: Math.toRadians(150),
 			JOINT_REFERENCE_ANGLE: Math.toRadians(180),

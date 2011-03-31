@@ -40,16 +40,18 @@ app.Class('app.m.GA', app.m.Object,
 				creature_i: this._current_creature_i,
 				result: result
 			});
+
+			this._current_creature_i++;
 		},
 		
 		getNextCreature: function () {
 			return this._current_creature = this._population.getCreature(
-				this._current_creature_i++
+				this._current_creature_i
 			);
 		},
 
 		hasNextCreature: function () {
-			return this._current_creature_i < app.c.GA.POPULATION_SIZE;
+			return this._current_creature_i < app.c.GA.POPULATION_SIZE - 1;
 		},
 
 		getGeneration: function () {

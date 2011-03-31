@@ -37,6 +37,10 @@ app.Class('app.m.Gene', app.m.Object,
 				max: this._max,
 				value: this._value
 			};
+		},
+
+		clone: function () {
+			return new app.m.Gene(this._min, this._max, this._value);
 		}
 	}
 );
