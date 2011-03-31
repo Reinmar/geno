@@ -1,26 +1,26 @@
 'use strict';
 
 app.Class('app.c.Population', app.c.Object,
-	function (size) {
+	function (name, size) {
 		app.c.Object.apply(this);
 		
-		this._m = new app.m.Population();
-		this._size = size;
+		this._m = new app.m.Population(name, size);
 	},
 	{
 		_m: null,
-		_size: null,
 
 
 		randomize: function () {
 			this._m.clear();
 
-			for (var i = 0, l = this._size; i < l; ++i) {
+			var name = this._m.getName();
+
+			for (var i = 0, l = this._m.getSize(); i < l; ++i) {
 				var cr = new app.c.Creature();
-				cr.randomize();
+				cr.randomize(name + '_cr:' + i);
 	
-				this._m.addCreature(cr.getM());		
+				this._m.addCreature(cr.getM());
 			}
-		}
+		},
 	}
 );

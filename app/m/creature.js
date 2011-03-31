@@ -1,15 +1,17 @@
 'use strict';
 
 app.Class('app.m.Creature', app.m.Object,
-	function (genotype) {
+	function (name, genotype) {
 		app.m.Object.apply(this);
 		
+		this._name = name;
 		this._fromGenotype(genotype);
 	},
 	{
 		// main limb
 		_body: null,
 		_genotype: null,
+		_name: null,
 
 		getBody: function () {
 			return this._body;
@@ -17,6 +19,10 @@ app.Class('app.m.Creature', app.m.Object,
 
 		getGenotype: function () {
 			return {};
+		},
+
+		getName: function () {
+			return this._name;
 		},
 
 		_fromGenotype: function (genotype) {

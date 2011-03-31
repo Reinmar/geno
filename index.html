@@ -13,6 +13,12 @@
 <body>
 	<canvas id="world" width="900" height="400">
 	</canvas>
+	<p>
+		<button id="sim_start">Start</button>
+		<button id="sim_stop">Stop</button>
+		<button id="sim_slow">Slow mode</button>
+		<button id="sim_fast">Fast mode</button>
+	</p>
 
 	<script src="vendor/underscore.js"></script>
 	<script src="vendor/underscore_prototypes.js"></script>
@@ -52,6 +58,7 @@
 	<script src="app/m/limb.js"></script>
 	<script src="app/m/gene.js"></script>
 	<script src="app/m/population.js"></script>
+	<script src="app/m/ga.js"></script>
 
 	<script src="app/v/object.js"></script>
 	<script src="app/v/simulation.js"></script>
@@ -62,10 +69,10 @@
 	<script src="app/c/population.js"></script>
 	<script src="app/c/simulation.js"></script>
 	<script src="app/c/world.js"></script>
-
+	<script src="app/c/ga.js"></script>
 
 	<script>
-		var s = new app.c.Simulation()
+		var s = new app.c.Simulation();
 		s.start();
 
 		/* class file template

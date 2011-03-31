@@ -27,12 +27,23 @@ app.Class('app.c.World', app.c.Object,
 		_b2joint_def: null,
 
 		_creature_body: null,
+		//array of all b2bodies
+		_creature_limbs: null,
+		//array of all joints
+		_creature_joints: null,
+
+		_step: 0,
 	
 		/*
 		 * @param creature app.m.Creature
 		 */
 		setCreature: function (creature) {
-			//TODO remove here old creature
+			if (this._creature_body)
+				this._destroyCreature();
+
+			this._creature_joints = [];
+			this._creature_limbs = [];
+
 			this._creature_body = this._addLimb(null, creature.getBody());
 		},
 
@@ -40,17 +51,27 @@ app.Class('app.c.World', app.c.Object,
 		 * Return distance creature walked
 		 */
 		getCreatureDistance: function () {
-			return 0;
+			return Math.abs(
+				this._creature_body.GetPosition().x - app.c.World.BODY_POS_X
+			);
 		},
 
 		loop: function (fast, dt) {
 			var world = this._b2world;
+			var sim_iters = fast ? 2 : 10;
 
 			world.Step(
 				dt / 1000,	//frame-rate
-				2,			//velocity iterations
-				2			//position iterations
+				sim_iters,			//velocity iterations
+				sim_iters			//position iterations
 			);
+			//check it once per 10 loops and reset counter
+			//because it may overflow
+			if (++this._step % 10 == 0) {
+				this._checkJointsLimits();
+				this._step = 0;
+			}
+
 			!fast && world.DrawDebugData();
 			world.ClearForces();
 		},
@@ -92,6 +113,7 @@ app.Class('app.c.World', app.c.Object,
 			body.CreateFixture(fd);
 			//for my own usage
 			body.cache_def = def;
+			this._creature_limbs.push(body);
 
 			if (joint) {
 				jd.Initialize(
@@ -103,7 +125,7 @@ app.Class('app.c.World', app.c.Object,
 				jd.upperAngle = joint.angle.upper;
 				jd.maxMotorTorque = joint.motor.max_torque;
 				jd.motorSpeed = joint.motor.speed;
-				this._b2world.CreateJoint(jd);
+				this._creature_joints.push(this._b2world.CreateJoint(jd));
 			}
 	
 			for (var i = 0, l = limb.getJointsCount(); i < l; ++i) {
@@ -112,6 +134,21 @@ app.Class('app.c.World', app.c.Object,
 			}
 
 			return body;
+		},
+
+		_checkJointsLimits: function () {
+			for (var i = 0, l = this._creature_joints.length; i < l; ++i) {
+				var joint = this._creature_joints[i],
+					angle = joint.GetJointAngle(),
+					speed = joint.GetMotorSpeed();
+
+				if (
+					angle + 0.05 > joint.GetUpperLimit() && speed > 0 ||
+					angle - 0.05 < joint.GetLowerLimit() && speed < 0
+				) {
+					joint.SetMotorSpeed(-speed);
+				}
+			}
 		},
 
 		_getLimbPos: function (parent, limb, joint) {
@@ -165,6 +202,16 @@ app.Class('app.c.World', app.c.Object,
 			return new app.b2Vec2(x, y);
 		},
 
+		_destroyCreature: function () {
+			var world = this._b2world;
+			for (var i = 0, l = this._creature_limbs.length; i < l; i++) {
+				world.DestroyBody(this._creature_limbs[i]);
+			}
+			for (var i = 0, l = this._creature_joints.length; i < l; i++) {
+				world.DestroyJoint(this._creature_joints[i]);
+			}
+		},
+
 		_init: function () {
 			var world = new app.b2World(
 				new app.b2Vec2(0, 10),	//gravity
@@ -182,7 +229,7 @@ app.Class('app.c.World', app.c.Object,
 		}
 	},
 	{
-		BODY_POS_X: 20,
+		BODY_POS_X: 22.5,
 		BODY_POS_Y: 15
 	}
 );

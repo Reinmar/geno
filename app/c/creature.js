@@ -7,14 +7,15 @@ app.Class('app.c.Creature', app.c.Object,
 	{
 		_m: null,
 
-		randomize: function () {
+		randomize: function (name) {
 			//random genotype
 			var gent = this._randomLimbGenotype(0);
 
-			this.fromGenotype(gent);
+			this.fromGenotype(name, gent);
 		},
-		fromGenotype: function (genotype) {
-			this._m = new app.m.Creature(genotype);
+
+		fromGenotype: function (name, genotype) {
+			this._m = new app.m.Creature(name, genotype);
 		},
 
 		_randomLimbGenotype: function (level) {
@@ -64,21 +65,21 @@ app.Class('app.c.Creature', app.c.Object,
 			// > 0 == true
 			LIMB_EXISTS: -1,
 			// in meters
-			LIMB_LENGTH: 0.5,
+			LIMB_LENGTH: 0.75,
 			// in meters
-			LIMB_WIDTH: 0.05,
+			LIMB_WIDTH: 0.1,
 			// in kg/m2
-			LIMB_DENSITY: 0.1,
+			LIMB_DENSITY: 0.5,
 			// in ?
 			LIMB_FRICTION: 0.5,
 			// in ?
-			LIMB_RESTITUTION: 0.01,
+			LIMB_RESTITUTION: 0.1,
 			// in Nm
-			MAX_MOTOR_TORQUE: 0,
+			MAX_MOTOR_TORQUE: 20,
 			// in angle/s
 			MOTOR_SPEED: 0,
-			JOINT_LOWER_ANGLE: Math.toRadians(-120),
-			JOINT_UPPER_ANGLE: Math.toRadians(0),
+			JOINT_LOWER_ANGLE: Math.toRadians(-150),
+			JOINT_UPPER_ANGLE: Math.toRadians(20),
 			JOINT_REFERENCE_ANGLE: Math.toRadians(-180),
 			// in % - how far from center of limb is left/right side of its child located
 			// 1 == [-1-][-2-]		-1 == [-2-][-1-]
@@ -90,20 +91,20 @@ app.Class('app.c.Creature', app.c.Object,
 			LIMB_EXISTS: 1,
 			LIMB_LENGTH: 1.5,
 			LIMB_WIDTH: 0.25,
-			LIMB_DENSITY: 2,
+			LIMB_DENSITY: 1,
 			LIMB_FRICTION: 0.9,
 			LIMB_RESTITUTION: 0.5,
 			MAX_MOTOR_TORQUE: 50,
-			MOTOR_SPEED: 5,
-			JOINT_LOWER_ANGLE: Math.toRadians(0),
-			JOINT_UPPER_ANGLE: Math.toRadians(120),
+			MOTOR_SPEED: 4,
+			JOINT_LOWER_ANGLE: Math.toRadians(-20),
+			JOINT_UPPER_ANGLE: Math.toRadians(150),
 			JOINT_REFERENCE_ANGLE: Math.toRadians(180),
 			CHILD_LIMB_POS: 1,
 			JOINT_POS: 1,
 		},
 		//body, 1st level limbs, 2nd level limbs
 		MAX_LIMBS_LEVELS: 2,
-		//body, max 4 limbs, max 2 limbs
-		MAX_CHILDREN_LIMBS: [ 4, 2, 0 ]
+		//body, max 4 limbs, max 1 limbs
+		MAX_CHILDREN_LIMBS: [ 4, 1, 0 ]
 	}
 );
