@@ -13,6 +13,10 @@ app.Class('app.c.GA', app.c.Object,
 		_m: null,
 		_population: null,
 
+		hasNextCreature: function () {
+			return this._m.hasNextCreature();
+		},
+
 		getNextCreature: function () {
 			if (!this._m.hasNextCreature()) {
 				this._reproduce();
@@ -23,9 +27,6 @@ app.Class('app.c.GA', app.c.Object,
 
 		setCurrentCreatureResult: function (result) {
 			this._m.setCurrentCreatureResult(result);
-		},
-		
-		getBestCreature: function (rank) {
 		},
 
 		init: function () {
@@ -43,8 +44,6 @@ app.Class('app.c.GA', app.c.Object,
 				'p:' + this._m.getGeneration(),	json
 			);
 
-			this.fireDataEvent('onNewPopulation', [ this._population.getM().toJSON() ]);
-
 			this._m.setPopulation(this._population.getM());
 		},
 
@@ -60,7 +59,16 @@ app.Class('app.c.GA', app.c.Object,
 				new_pop_name = 'p:' + (m.getGeneration() + 1);
 			
 			m.sortResults();
-			this.fireDataEvent('onPopulationResults', []);
+			this.fireDataEvent(
+				'onPopulationResults',
+				[
+					this._population.getM().getName(),
+					m.getBestResult().toFixed(2),
+					m.getAverageResult().toFixed(2),
+					JSON.stringify(m.getTop10()),
+					JSON.stringify(m.getLastTop10())
+				]
+			);
 
 			m.prepareParents(app.c.GA.PARENTS_NUMBER);
 
@@ -91,7 +99,7 @@ app.Class('app.c.GA', app.c.Object,
 				throw new Error('Fell here in infinite loop. Read comment');
 			}
 
-			this.fireDataEvent('onNewPopulation', [ new_pop.getM().toJSON(), new_pop_name ]);
+			this.fireDataEvent('onNewPopulation', [ new_pop_name, new_pop.getM().toJSON() ]);
 			
 			this._population = new_pop;
 			m.setPopulation(new_pop_m);
@@ -99,11 +107,11 @@ app.Class('app.c.GA', app.c.Object,
 		}
 	},
 	{
-		POPULATION_SIZE: 50,
+		POPULATION_SIZE: 100,
 		//in seconds
 		CREATURE_LIFE_EXPECTANCY: 20,
 		//number of creatures that are used in reproduction
-		PARENTS_NUMBER: 20,
+		PARENTS_NUMBER: 25,
 		REPRODUCTION_MAX_PART_LENGTH: 3,
 		REPRODUCTION_MUTATION_FACTOR: 0.01 //1%
 	}		

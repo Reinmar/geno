@@ -11,16 +11,24 @@ app.Class('app.c.Simulation', app.c.Object,
 		this.slow();
 		
 
-		this._ga.attachEvent('onNewPopulation', function (population_json, population_name) {
+		this._ga.attachEvent('onNewPopulation', function (population_name, population_json) {
 			app.$('last_generation').value = population_json;
 
 			that._trackTime();
 			app.log('New population (' + population_name + ') created', that._time_elapsed);
 		});
-		this._ga.init();
+
+		this._ga.attachEvent('onPopulationResults', function (population_name, best, avg, top10_json, last_top10_json) {
+			app.$('top10_creatures').value = top10_json;
+			app.$('last_top10_creatures').value = last_top10_json;
+
+			that._trackTime();
+			app.log('Current population (' + population_name + ') results - best: ' + best + 'm, average: ' + avg + 'm', that._time_elapsed);
+		});
 
 		this._observeControllButtons();
 
+		this._ga.init();
 		this._startNextTest();
 	},
 	{
@@ -37,6 +45,8 @@ app.Class('app.c.Simulation', app.c.Object,
 		_fast: false,
 		//loop step
 		_step: 0,
+		//cases that no reproduction takes place (sim stops)
+		_showcase: false,
 
 		//current creature
 		_creature: null,
@@ -73,7 +83,11 @@ app.Class('app.c.Simulation', app.c.Object,
 			app.log('Simulation stopped', this._time_elapsed);
 		},
 
-		generationFromJSON: function (json) {
+		generationFromJSON: function (json, showcase) {
+			this._trackTime();
+			if (showcase)
+				app.log('Showcase start', this._time_elapsed);
+			this._showcase = showcase;
 			this._ga.generationFromJSON(json);
 			this._startNextTest();
 		},
@@ -94,7 +108,10 @@ app.Class('app.c.Simulation', app.c.Object,
 				if (that._creature_age >= that._creature_life_exp) {
 					that._finishCurrentTest();
 
-					that._startNextTest();
+					//startNextTest returns false if sim should
+					//stop here immediately
+					if (!that._startNextTest())
+						return;
 				}
 				
 				world.loop(that._fast, app.c.Simulation.LOOP_DT_SLOW);
@@ -124,6 +141,12 @@ app.Class('app.c.Simulation', app.c.Object,
 		 * And put it in to the world
 		 */
 		_startNextTest: function () {
+			if (this._showcase && !this._ga.hasNextCreature()) {
+				this.stop();
+				this._trackTime();
+				app.log('Showcase end', this._time_elapsed);
+				return false;
+			}
 			this._creature = this._ga.getNextCreature();
 			this._creature_life_exp = Math.floor(
 				app.c.GA.CREATURE_LIFE_EXPECTANCY * 1000 / app.c.Simulation.LOOP_DT_SLOW
@@ -131,6 +154,8 @@ app.Class('app.c.Simulation', app.c.Object,
 			this._creature_age = 0;
 
 			this._world.setCreature(this._creature);
+
+			return true;
 		},
 		
 		/*
@@ -155,8 +180,14 @@ app.Class('app.c.Simulation', app.c.Object,
 			app.$('sim_fast').addEventListener('click', function (event) {
 				that.fast();
 			}, false);
-			app.$('sim_set_generation').addEventListener('click', function (event) {
-				that.generationFromJSON(app.$('last_generation').value);
+			app.$('sim_set_generation_1').addEventListener('click', function (event) {
+				that.generationFromJSON(app.$('last_generation').value, false);
+			}, false);
+			app.$('sim_set_generation_2').addEventListener('click', function (event) {
+				that.generationFromJSON(app.$('top10_creatures').value, true);
+			}, false);
+			app.$('sim_set_generation_3').addEventListener('click', function (event) {
+				that.generationFromJSON(app.$('last_top10_creatures').value, true);
 			}, false);
 		}			
 	},

@@ -26,12 +26,17 @@
 	<section>
 		<h1>Current generation</h1>
 		<textarea id="last_generation" rows="10" cols="100"></textarea>
-		<button id="sim_set_generation">Use this generation</button>
+		<button id="sim_set_generation_1">Use this generation</button>
 	</section>
 	<section>
-		<h1>Top ten creatures</h1>
+		<h1>Top ten creatures of all time</h1>
 		<textarea id="top10_creatures" rows="10" cols="100"></textarea>
-		<button id="sim_set_generation">Use this as generation</button>
+		<button id="sim_set_generation_2">Load this</button>
+	</section>
+	<section>
+		<h1>Top ten creatures of last generation</h1>
+		<textarea id="last_top10_creatures" rows="10" cols="100"></textarea>
+		<button id="sim_set_generation_3">Load this</button>
 	</section>
 
 	<script src="vendor/underscore.js"></script>
@@ -90,23 +95,7 @@
 	<script src="app/c/reproduce.js"></script>
 
 	<script>
-		try {
-			var s = new app.c.Simulation();
-		} catch (e) {
-			console.log(e);
-		}
-
-		/* class file template
-'use strict';
-
-app.Class('', app..Object,
-	function () {
-		app..Object.apply(this);
-	},
-	{
-	}
-);
-		*/		
+		var s = new app.c.Simulation();
 	</script>
 </body>
 </html>

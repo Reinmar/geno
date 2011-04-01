@@ -58,18 +58,15 @@ app.Class('app.c.World', app.c.Object,
 
 		loop: function (fast, dt) {
 			var world = this._b2world;
-			var sim_iters = fast ? 2 : 10;
 
 			world.Step(
 				dt / 1000,	//frame-rate
-				sim_iters,			//velocity iterations
-				sim_iters			//position iterations
+				5,			//velocity iterations
+				5			//position iterations
 			);
-			//check it once per 10 loops and reset counter
-			//because it may overflow
+			//check it once per 10 loops
 			if (++this._step % 10 == 0) {
 				this._checkJointsLimits();
-				this._step = 0;
 			}
 
 			!fast && world.DrawDebugData();
