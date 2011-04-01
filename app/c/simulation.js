@@ -121,7 +121,7 @@ app.Class('app.c.Simulation', app.c.Object,
 				fn();
 			}
 			else {
-				for (var i = 0; i < 5000 && this._on; ++i) {
+				for (var i = 0; i < 1000 && this._on; ++i) {
 					fn();
 				}
 			}
@@ -130,7 +130,7 @@ app.Class('app.c.Simulation', app.c.Object,
 				this._loop();
 			}.bind(this), this._dt);
 
-			if (this._step % 1000 === 0) {
+			if (this._step % 10000 === 0) {
 				this._trackTime();
 				app.debug('Simulation step: ' + this._step, this._time_elapsed);
 			}

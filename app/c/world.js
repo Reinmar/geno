@@ -82,10 +82,22 @@ app.Class('app.c.World', app.c.Object,
 			//ground { left: -5m; top: 18m; width:200m }
 			var body_def = new app.b2BodyDef();
 			body_def.type = app.b2Body.b2_staticBody;
-			body_def.position.x = 22.5;
-			body_def.position.y = 20;
+			body_def.position.x = 25
+			body_def.position.y = 15;
 			fix_def.shape = new app.b2PolygonShape();
 			fix_def.shape.SetAsBox(100, 2);
+			this._b2world.CreateBody(body_def).CreateFixture(fix_def);
+
+			fix_def.shape.SetAsBox(0.1, 1.5);
+			body_def.position.y = 15.5;
+			for (var i = 0; i < 50; i += 5) {
+				if (i !== 25) {
+					body_def.position.x = i;
+					this._b2world.CreateBody(body_def).CreateFixture(fix_def);
+				}
+			}
+			body_def.position.x = 25;
+			body_def.position.y = 15;
 			this._b2world.CreateBody(body_def).CreateFixture(fix_def);
 		},
 		
@@ -226,7 +238,7 @@ app.Class('app.c.World', app.c.Object,
 		}
 	},
 	{
-		BODY_POS_X: 22.5,
-		BODY_POS_Y: 15
+		BODY_POS_X: 25,
+		BODY_POS_Y: 10
 	}
 );
