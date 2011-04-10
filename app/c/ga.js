@@ -109,10 +109,10 @@ app.Class('app.c.GA', app.c.Object,
 	{
 		POPULATION_SIZE: 100,
 		//in seconds
-		CREATURE_LIFE_EXPECTANCY: 20,
+		CREATURE_LIFE_EXPECTANCY: 15,
 		//number of creatures that are used in reproduction
-		PARENTS_NUMBER: 25,
-		REPRODUCTION_MAX_PART_LENGTH: 3,
+		PARENTS_NUMBER: 80,
+		REPRODUCTION_MAX_PART_LENGTH: 4,
 		REPRODUCTION_MUTATION_FACTOR: 0.01 //1%
 	}		
 );

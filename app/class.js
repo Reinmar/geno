@@ -11,7 +11,7 @@ app.Class = function (path, parent_class, constructor, properties, statics) {
 	if (parent_class)
 		constructor.prototype = new parent_class();
 	else if (properties)
-		constructor.prototypes = {};
+		constructor.prototype = {};
 	else 
 		constructor.prototype = null;
 	Object.extend(constructor.prototype, properties);

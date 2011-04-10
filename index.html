@@ -4,6 +4,12 @@
 	<meta charset="utf-8">
 	<title></title>
 	<style>
+		body {
+			font-family: 'Trebuchet MS', Arial;
+		}
+		section > h1 {
+			font-size: 1.25em;
+		}
 		#world {
 			border: solid 2px #AAF;
 			background: #333;
@@ -14,29 +20,38 @@
 	</style>
 </head>
 <body>
+	<h1>The fastest creature &ndash; genetic algorithm simulation</h1>
+	<ul>
+		<li>Use only with Chrome (Firefox 4 will eat Your CPU and Opera does not have <code>Function.prototype.bind</code>).</li>
+		<li>Switch on JavaScript Console (<kbd>ctrl+shift+j</kbd>) &ndash; there are some useful information.</li>
+		<li>Try some <a href="examples/">examples</a> (paste them into textarea below).</li>
+		<li>Have fun...</li>
+	</ul>
 	<canvas id="world" width="1000" height="300">
 	</canvas>
 	<p>
 		<button id="sim_start">Start</button>
-		<button id="sim_stop">Stop</button>
-		<button id="sim_slow">Slow mode</button>
+		<button id="sim_stop" disabled>Stop</button>
+		<button id="sim_slow" disabled>Slow mode</button>
 		<button id="sim_fast">Fast mode</button>
 	</p>
 
 	<section>
+		<h1>Use this generation</h1>
+		<textarea id="user_generation" rows="6" cols="100">Paste here JSON copied from examples or textareas below this</textarea>
+		<button id="sim_use_generation">Use this generation</button>
+	</section>
+	<section>
 		<h1>Current generation</h1>
-		<textarea id="last_generation" rows="8" cols="100"></textarea>
-		<button id="sim_set_generation_1">Use this generation</button>
+		<textarea id="last_generation" rows="6" cols="100"></textarea>
 	</section>
 	<section>
 		<h1>Top ten creatures of all time</h1>
-		<textarea id="top10_creatures" rows="8" cols="100"></textarea>
-		<button id="sim_set_generation_2">Load this</button>
+		<textarea id="top10_creatures" rows="6" cols="100"></textarea>
 	</section>
 	<section>
 		<h1>Top ten creatures of last generation</h1>
-		<textarea id="last_top10_creatures" rows="8" cols="100"></textarea>
-		<button id="sim_set_generation_3">Load this</button>
+		<textarea id="last_top10_creatures" rows="6" cols="100"></textarea>
 	</section>
 
 	<script src="vendor/underscore.js"></script>
@@ -68,7 +83,7 @@
 			b2DebugDraw: Box2D.Dynamics.b2DebugDraw,
 			b2RevoluteJointDef: Box2D.Dynamics.Joints.b2RevoluteJointDef,
 
-			DEBUG: true
+			DEBUG: false
 		};
 	</script>
 	<script src="app/class.js"></script>

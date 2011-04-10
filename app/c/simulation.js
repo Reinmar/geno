@@ -59,11 +59,15 @@ app.Class('app.c.Simulation', app.c.Object,
 		fast: function () {
 			this._fast = true;
 			this._dt = app.c.Simulation.LOOP_DT_FAST;
+			app.$('sim_fast').disabled = true;
+			app.$('sim_slow').disabled = false;
 		},
 
 		slow: function () {
 			this._fast = false;
 			this._dt = app.c.Simulation.LOOP_DT_SLOW;
+			app.$('sim_slow').disabled = true;
+			app.$('sim_fast').disabled = false;
 		},
 
 		start: function () {
@@ -72,6 +76,8 @@ app.Class('app.c.Simulation', app.c.Object,
 	
 			this._trackTime();
 			app.log('Simulation started', this._time_elapsed);
+			app.$('sim_start').disabled = true;
+			app.$('sim_stop').disabled = false;
 			
 			this._loop();
 		},
@@ -79,8 +85,9 @@ app.Class('app.c.Simulation', app.c.Object,
 		stop: function () {
 			this._on = false;
 			this._trackTime();
-
 			app.log('Simulation stopped', this._time_elapsed);
+			app.$('sim_start').disabled = false;
+			app.$('sim_stop').disabled = true;			
 		},
 
 		generationFromJSON: function (json, showcase) {
@@ -180,14 +187,8 @@ app.Class('app.c.Simulation', app.c.Object,
 			app.$('sim_fast').addEventListener('click', function (event) {
 				that.fast();
 			}, false);
-			app.$('sim_set_generation_1').addEventListener('click', function (event) {
-				that.generationFromJSON(app.$('last_generation').value, false);
-			}, false);
-			app.$('sim_set_generation_2').addEventListener('click', function (event) {
-				that.generationFromJSON(app.$('top10_creatures').value, true);
-			}, false);
-			app.$('sim_set_generation_3').addEventListener('click', function (event) {
-				that.generationFromJSON(app.$('last_top10_creatures').value, true);
+			app.$('sim_use_generation').addEventListener('click', function (event) {
+				that.generationFromJSON(app.$('user_generation').value, false);
 			}, false);
 		}			
 	},
