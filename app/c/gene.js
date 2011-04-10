@@ -19,8 +19,13 @@ app.Class('app.c.Gene', app.c.Object,
 			return this;
 		},
 
-		setM: function (min, max, value) {
-			this._m = new app.m.Gene(min, max, value);
+		setM: function (min /*or model gene*/, max, value/*not required*/) {
+			if (arguments.length > 1) {
+				this._m = new app.m.Gene(min, max, value);
+			}
+			else {
+				this._m = min;
+			}
 			return this;
 		},
 	},
