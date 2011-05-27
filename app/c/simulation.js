@@ -15,15 +15,20 @@ app.Class('app.c.Simulation', app.c.Object,
 			app.$('last_generation').value = population_json;
 
 			that._trackTime();
-			app.log('New population (' + population_name + ') created', that._time_elapsed);
+			//app.log('New population (' + population_name + ') created', that._time_elapsed);
 		});
 
-		this._ga.attachEvent('onPopulationResults', function (population_name, best, avg, top10_json, last_top10_json) {
+		this._ga.attachEvent('onPopulationResults', function (generation_num, population_name, best, avg, top10_json, last_top10_json) {
 			app.$('top10_creatures').value = top10_json;
 			app.$('last_top10_creatures').value = last_top10_json;
 
 			that._trackTime();
-			app.log('Current population (' + population_name + ') results - best: ' + best + 'm, average: ' + avg + 'm', that._time_elapsed);
+			//app.log('Current population (' + population_name + ') results - best: ' + best + 'm, average: ' + avg + 'm', that._time_elapsed);
+
+			if (that._simulation_for && generation_num >= that._simulation_for) {
+				that._simulation_for_callback(best, avg, that._ga.getM().getHistoryBest(), that._ga.getM().getHistoryAverage());
+				that.stop();
+			}
 		});
 
 		this._observeControllButtons();
@@ -47,6 +52,9 @@ app.Class('app.c.Simulation', app.c.Object,
 		_step: 0,
 		//cases that no reproduction takes place (sim stops)
 		_showcase: false,
+		//simulate N generations then call back results
+		_simulation_for: null,
+		_simulation_for_callback: null,
 
 		//current creature
 		_creature: null,
@@ -80,6 +88,12 @@ app.Class('app.c.Simulation', app.c.Object,
 			app.$('sim_stop').disabled = false;
 			
 			this._loop();
+		},
+
+		startFor: function (n, callback) {
+			this._simulation_for = n;
+			this._simulation_for_callback = callback;
+			this.start();
 		},
 
 		stop: function () {
@@ -189,6 +203,10 @@ app.Class('app.c.Simulation', app.c.Object,
 			}, false);
 			app.$('sim_use_generation').addEventListener('click', function (event) {
 				that.generationFromJSON(app.$('user_generation').value, false);
+			}, false);
+			app.$('sim_history').addEventListener('click', function (event) {
+				app.log('Best history: ' + that._ga.getM().getHistoryBest().join("\t").replace(/\./g, ','), that._time_elapsed);
+				app.log('Average history: ' + that._ga.getM().getHistoryAverage().join("\t").replace(/\./g, ','), that._time_elapsed);
 			}, false);
 		}			
 	},

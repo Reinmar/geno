@@ -61,8 +61,8 @@ app.Class('app.c.World', app.c.Object,
 
 			world.Step(
 				dt / 1000,	//frame-rate
-				5,			//velocity iterations
-				5			//position iterations
+				2,			//velocity iterations (best value 5)
+				2			//position iterations (best value 5)
 			);
 			//check it once per 10 loops
 			if (++this._step % 10 == 0) {

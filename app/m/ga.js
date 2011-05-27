@@ -6,6 +6,8 @@ app.Class('app.m.GA', app.m.Object,
 
 		this._results = [];
 		this._top10 = [];
+		this._history_best = [];
+		this._history_average = [];
 	},
 	{
 		//generation number
@@ -21,6 +23,8 @@ app.Class('app.m.GA', app.m.Object,
 		_parents: null,
 		//top 10 creatures of all time {result, creature}
 		_top10: null,
+		_history_best: null,
+		_history_average: null,
 
 		nextSession: function () {
 			this._current_creature = null;
@@ -82,6 +86,9 @@ app.Class('app.m.GA', app.m.Object,
 				}
 			}
 			this._top10 = top10;
+
+			this._history_best.push(this.getBestResultEver());
+			this._history_average.push(this.getAverageResult());
 		},
 
 		getTop10: function () {
@@ -134,13 +141,25 @@ app.Class('app.m.GA', app.m.Object,
 			return this._results[0].result;
 		},
 
+		getBestResultEver: function () {
+			return this._top10[0].result;
+		},
+
 		getAverageResult: function () {
 			var sum = 0;
 			for (var i = 0, l = this._results.length; i < l; ++i)
 				sum += this._results[i].result;
 
 			return sum / l;
-		}
+		},
+
+		getHistoryBest: function () {
+			return this._history_best;
+		},
+
+		getHistoryAverage: function () {
+			return this._history_average;
+		},
 	}
 );
 

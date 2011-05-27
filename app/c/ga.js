@@ -62,6 +62,7 @@ app.Class('app.c.GA', app.c.Object,
 			this.fireDataEvent(
 				'onPopulationResults',
 				[
+					m.getGeneration(),
 					this._population.getM().getName(),
 					m.getBestResult().toFixed(2),
 					m.getAverageResult().toFixed(2),
@@ -111,7 +112,7 @@ app.Class('app.c.GA', app.c.Object,
 		//in seconds
 		CREATURE_LIFE_EXPECTANCY: 15,
 		//number of creatures that are used in reproduction
-		PARENTS_NUMBER: 80,
+		PARENTS_NUMBER: 75,
 		REPRODUCTION_MAX_PART_LENGTH: 4,
 		REPRODUCTION_MUTATION_FACTOR: 0.005 //0.5%
 	}		
